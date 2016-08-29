@@ -1,0 +1,16 @@
+node() {
+    def fw4spl_image = docker.build '.:${env.BUILD_TAG}'
+    fw4spl_image.inside {
+    
+        stage 'checkout'
+        def fw4spl_branch = "fw4spl_0.11.0"
+        git branch: "${fw4spl_branch}", url: 'https://github.com/fw4spl-org/fw4spl.git'
+        
+        stage 'configure'
+        sh 'mkdir build'
+        sh 'cd ./build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/tmp ./fw4spl/ -DBUILD_DOCUMENTATION:BOOL=ON -DBUILD_TESTS:BOOL=OFF '
+
+        stage 'build'
+        sh 'make doc'
+    }
+}
