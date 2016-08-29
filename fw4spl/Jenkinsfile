@@ -1,8 +1,24 @@
 node() {
-    def docker_file = pwd() + 'Dockerfile'
-    def fw4spl_image = docker.build('fw4spl_ubuntu:14.04', '-f ${docker_file} .')
-    fw4spl_image.inside {
-    
+    docker.image('ubuntu:14.04').inside('-u root:root') {
+        
+        stage 'environment'
+        // install build dependencies
+        sh 'apt-get update && apt-get upgrade -y'
+        sh 'apt-get install -y build-essential \
+                               ninja-build \
+                               python2.7 \
+                               git \
+                               wget \
+                               graphviz \
+                               gnuplot'
+        // install cmake
+        sh 'curl -sSL https://cmake.org/files/v3.6/cmake-3.6.1-Linux-x86_64.tar.gz | tar -xzC /opt'
+        sh 'export PATH=/opt/cmake-3.6.1-Linux-x86_64/bin/:$PATH'
+        
+        // Install doxygen
+        sh 'curl -sSL http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.11.linux.bin.tar.gz | tar -xzC /opt'
+        sh 'export PATH=/opt/doxygen-1.8.11/bin/:$PATH'
+        
         stage 'checkout'
         def fw4spl_branch = "fw4spl_0.11.0"
         git branch: "${fw4spl_branch}", url: 'https://github.com/fw4spl-org/fw4spl.git'
