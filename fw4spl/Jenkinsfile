@@ -1,5 +1,5 @@
 node() {
-    def fw4spl_image = docker.build('fw4spl:${env.BUILD_TAG}', '.')
+    def fw4spl_image = docker.build('fw4spl_ubuntu:14.04')
     fw4spl_image.inside {
     
         stage 'checkout'

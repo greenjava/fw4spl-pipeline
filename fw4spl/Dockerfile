@@ -15,6 +15,6 @@ RUN apt-get install -y build-essential \
 RUN curl -sSL https://cmake.org/files/v3.6/cmake-3.6.1-Linux-x86_64.tar.gz | tar -xzC /opt
 ENV PATH /opt/cmake-3.6.1-Linux-x86_64/bin/:$PATH
 
-# Install cmake
+# Install doxygen
 RUN curl -sSL http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.11.linux.bin.tar.gz | tar -xzC /opt
 ENV PATH /opt/doxygen-1.8.11/bin/:$PATH
