@@ -1,5 +1,6 @@
 node() {
-    def fw4spl_image = docker.build('fw4spl_ubuntu:14.04', '-f ./Dockerfile')
+    def docker_file = pwd() + 'Dockerfile'
+    def fw4spl_image = docker.build('fw4spl_ubuntu:14.04', '-f ${docker_file} .')
     fw4spl_image.inside {
     
         stage 'checkout'
