@@ -1,25 +1,36 @@
 node() {
     def workspace = pwd()
-    docker.build("fw4spl_ubuntu:14.04", "${workspace}@script/fw4spl/").inside("-u root:root") {
-                
-        stage "checkout"
+    
+    stage "docker"
+    def fw4spl_docker = docker.build("fw4spl_ubuntu:14.04", "${workspace}@script/fw4spl/")
+    
+    docker.inside("-u root:root") {
+    
+        stage "environment"
         sh "mkdir -p ${workspace}/Src && \
             mkdir -p ${workspace}/Build && \
             mkdir -p ${workspace}/Install"
         
         def fw4spl_branch = "fw4spl_0.11.0"
-        sh "cd ${workspace}/Src && \
-            git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git"
+        def fw4spl_repo_dir = "${workspace}/Src/fw4spl"
+        
+        if(fileExists(fw4spl_repo_dir)){
+            dir(fw4spl_repo_dir){
+                deleteDir()
+            }
+        }
+        
+        stage "checkout"
+        sh "git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git ${fw4spl_repo_dir}"
         
         stage "configure"
-        sh "cd ${workspace}/Build && \
-            cmake ${workspace}/Src/fw4spl/ \
+        dir "${workspace}/Build"
+        sh "cmake ${fw4spl_repo_dir} \
                   -DCMAKE_INSTALL_PREFIX:PATH=${workspace}/Install \
                   -DBUILD_DOCUMENTATION:BOOL=ON \
                   -DBUILD_TESTS:BOOL=OFF"
 
         stage "build"
-        sh "cd ${workspace}/Build && \
-            make doc"
+        sh "make doc"
     }
 }
