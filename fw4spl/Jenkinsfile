@@ -23,12 +23,17 @@ node() {
         env.PATH = "${doxygen_dir}:${env.PATH}"
         
         stage 'checkout'
+        def workspace = pwd()
+        sh 'mkdir -p ${workspace}/{Src,Build,Install}'
         def fw4spl_branch = "fw4spl_0.11.0"
-        git branch: "${fw4spl_branch}", url: 'https://github.com/fw4spl-org/fw4spl.git'
+        sh 'cd ${workspace}/Src && git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git'
         
         stage 'configure'
-        sh 'mkdir build'
-        sh 'cd ./build && cmake -DCMAKE_INSTALL_PREFIX:PATH=/tmp ./fw4spl/ -DBUILD_DOCUMENTATION:BOOL=ON -DBUILD_TESTS:BOOL=OFF '
+        sh 'cd ${workspace}/Build && \
+            cmake ${workspace}/Src/fw4spl/ \
+                  -DCMAKE_INSTALL_PREFIX:PATH=${workspace}/Install \
+                  -DBUILD_DOCUMENTATION:BOOL=ON \
+                  -DBUILD_TESTS:BOOL=OFF'
 
         stage 'build'
         sh 'make doc'
