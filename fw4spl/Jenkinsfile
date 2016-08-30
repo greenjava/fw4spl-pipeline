@@ -1,35 +1,15 @@
 node() {
     def workspace = pwd()
     docker.build("fw4spl_ubuntu:14.04", "${workspace}@script/fw4spl/").inside("-u root:root") {
-        
-        //stage "environment"
-        //// install build dependencies
-        //sh "apt-get update && apt-get upgrade -y"
-        //sh "apt-get install -y build-essential \
-        //                       ninja-build \
-        //                       python2.7 \
-        //                       git \
-        //                       wget \
-        //                       curl \
-        //                       graphviz \
-        //                       gnuplot"
-        //// install cmake
-        //sh "curl -sSL https://cmake.org/files/v3.6/cmake-3.6.1-Linux-x86_64.tar.gz | tar -xzC /opt"
-        //def cmake_dir = "/opt/cmake-3.6.1-Linux-x86_64/bin/"
-        //env.PATH = "${cmake_dir}:${env.PATH}"
-        //
-        //// Install doxygen
-        //sh "curl -sSL http://ftp.stack.nl/pub/users/dimitri/doxygen-1.8.11.linux.bin.tar.gz | tar -xzC /opt"
-        //def doxygen_dir = "/opt/doxygen-1.8.11/bin/"
-        //env.PATH = "${doxygen_dir}:${env.PATH}"
-        
+                
         stage "checkout"
         sh "mkdir -p ${workspace}/Src && \
             mkdir -p ${workspace}/Build && \
             mkdir -p ${workspace}/Install"
         
         def fw4spl_branch = "fw4spl_0.11.0"
-        sh "cd ${workspace}/Src && git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git"
+        sh "cd ${workspace}/Src && \
+            git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git"
         
         stage "configure"
         sh "cd ${workspace}/Build && \
