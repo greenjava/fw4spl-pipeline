@@ -14,9 +14,7 @@ node() {
         def fw4spl_repo_dir = "${workspace}/Src/fw4spl"
         
         if(fileExists(fw4spl_repo_dir)){
-            dir(fw4spl_repo_dir){
-                deleteDir()
-            }
+            sh "rm -rf ${fw4spl_repo_dir}"
         }
         
         stage "checkout"
