@@ -1,6 +1,6 @@
 node() {
     def workspace = pwd()
-    docker.build("fw4spl_ubuntu:14.04", "-f ${workspace}@script/fw4spl/Dockerfile").inside("-u root:root") {
+    docker.build("fw4spl_ubuntu:14.04", "${workspace}@script/fw4spl/").inside("-u root:root") {
         
         //stage "environment"
         //// install build dependencies
