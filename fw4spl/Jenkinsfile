@@ -9,6 +9,7 @@ node() {
                                python2.7 \
                                git \
                                wget \
+                               curl \
                                graphviz \
                                gnuplot'
         // install cmake
