@@ -24,7 +24,10 @@ node() {
         
         stage "checkout"
         def workspace = pwd()
-        sh "mkdir -p ${workspace}/{Src,Build,Install}"
+        sh "mkdir -p ${workspace}/Src && \
+            mkdir -p ${workspace}/Build && \
+            mkdir -p ${workspace}/Install}"
+        
         def fw4spl_branch = "fw4spl_0.11.0"
         sh "cd ${workspace}/Src && git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git"
         
