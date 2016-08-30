@@ -25,15 +25,15 @@ node() {
         sh "git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl-ar.git ${fw4spl_ar_repo_dir}"
         
         stage "configure"
-        dir("${workspace}/Build"){
-            sh "cmake ${fw4spl_repo_dir} \
-                      -DADDITIONAL_PROJECTS:PATH=${fw4spl_ar_repo_dir} \
-                      -DCMAKE_INSTALL_PREFIX:PATH=${workspace}/Install \
-                      -DBUILD_DOCUMENTATION:BOOL=ON \
-                      -DBUILD_TESTS:BOOL=OFF"
+        sh "cd ${workspace}/Build && \
+            cmake ${fw4spl_repo_dir} \
+                  -DADDITIONAL_PROJECTS:PATH=${fw4spl_ar_repo_dir} \
+                  -DCMAKE_INSTALL_PREFIX:PATH=${workspace}/Install \
+                  -DBUILD_DOCUMENTATION:BOOL=ON \
+                  -DBUILD_TESTS:BOOL=OFF"
 
-            stage "build"
-            sh "make doc"
-        }
+        stage "build"
+        sh "cd ${workspace}/Build && \
+            make doc"
     }
 }
