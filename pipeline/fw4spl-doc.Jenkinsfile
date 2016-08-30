@@ -2,8 +2,9 @@ node() {
     def workspace = pwd()
     
     stage "docker"
+    def docker_context = "${workspace}@script/docker/"
     def fw4spl_docker = docker.build("fw4spl_ubuntu:14.04",
-                                     "-f ${workspace}@script/docker/fw4spl-ubuntu-14.04.Dockerfile ${workspace}@script/docker/")
+                                     "-f ${docker_context}/fw4spl-ubuntu-14.04.Dockerfile ${docker_context}")
     fw4spl_docker.inside("-u root:root") {
     
         stage "environment"
