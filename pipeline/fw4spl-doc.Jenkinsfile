@@ -2,7 +2,7 @@ node() {
     def workspace = pwd()
     
     stage "docker"
-    def fw4spl_docker = docker.build("fw4spl_ubuntu:14.04", "${workspace}@script/fw4spl/")
+    def fw4spl_docker = docker.build("fw4spl_ubuntu:14.04", "-f ${workspace}@script/docker/fw4spl-ubuntu-14.04.Dockerfile ${workspace}")
     fw4spl_docker.inside("-u root:root") {
     
         stage "environment"
@@ -12,17 +12,20 @@ node() {
         
         def fw4spl_branch = "fw4spl_0.11.0"
         def fw4spl_repo_dir = "${workspace}/Src/fw4spl"
-        
-        if(fileExists(fw4spl_repo_dir)){
-            sh "rm -rf ${fw4spl_repo_dir}"
-        }
+        def fw4spl-ar_repo_dir = "${workspace}/Src/fw4spl-ar"
+
+        // clean old repositories
+        sh "rm -rf ${fw4spl_repo_dir}"
+        sh "rm -rf ${fw4spl-ar_repo_dir}"
         
         stage "checkout"
         sh "git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl.git ${fw4spl_repo_dir}"
+        sh "git clone --depth=1 -b ${fw4spl_branch} https://github.com/fw4spl-org/fw4spl-ar.git ${fw4spl-ar_repo_dir}"
         
         stage "configure"
         dir("${workspace}/Build"){
             sh "cmake ${fw4spl_repo_dir} \
+                      -DADDITIONAL_PROJECTS:PATH=${fw4spl-ar_repo_dir} \
                       -DCMAKE_INSTALL_PREFIX:PATH=${workspace}/Install \
                       -DBUILD_DOCUMENTATION:BOOL=ON \
                       -DBUILD_TESTS:BOOL=OFF"
