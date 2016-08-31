@@ -6,7 +6,7 @@ node('docker') {
     def pipeline_repo_dir = "${workspace}/pipeline/"
     // clean old repositories
     sh "rm -rf ${pipeline_repo_dir}"
-    sh "git clone --depth=1 -b ${fw4spl_branch} https://github.com/greenjava/fw4spl-pipeline.git ${pipeline_repo_dir}"
+    sh "git clone --depth=1 -b master https://github.com/greenjava/fw4spl-pipeline.git ${pipeline_repo_dir}"
         
     stage "docker"
     def docker_context = "${pipeline_repo_dir}/docker"
