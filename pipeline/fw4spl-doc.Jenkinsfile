@@ -10,8 +10,8 @@ node('docker') {
         
     stage "docker"
     def docker_context = "${pipeline_repo_dir}/docker"
-    def fw4spl_docker = docker.build("fw4spl_ubuntu:14.04",
-                                     "-f ${docker_context}/fw4spl-ubuntu-14.04.Dockerfile ${docker_context}")
+    def fw4spl_docker = docker.build("fw4spl_doc_ubuntu:14.04",
+                                     "-f ${docker_context}/fw4spl-doc-ubuntu-14.04.Dockerfile ${docker_context}")
     fw4spl_docker.inside("-u root:root") {
     
         stage "environment"
