@@ -5,7 +5,9 @@ node('windows') {
     stage "pipeline"
     def pipeline_repo_dir = "${workspace}\\pipeline"
     // clean old repositories
-    bat "rd /s /q \"${pipeline_repo_dir}\""
+    if(fileExists("${pipeline_repo_dir}"){
+        bat "rd /s /q \"${pipeline_repo_dir}\""
+    }
     bat "git clone --depth=1 -b master https://github.com/greenjava/fw4spl-pipeline.git ${pipeline_repo_dir}"
     
     stage "environment"
@@ -17,8 +19,9 @@ node('windows') {
     def fw4spl__deps_repo_dir = "${workspace}\\Src\\fw4spl"
 
     // clean old repositories
-    bat "rd /s /q \"${fw4spl__deps_repo_dir}\""
-    
+    if(fileExists("${fw4spl__deps_repo_dir}"){
+        bat "rd /s /q \"${fw4spl__deps_repo_dir}\""
+    }
     stage "checkout"
     bat "git clone --depth=1 -b ${fw4spl_deps_branch} https://github.com/fw4spl-org/fw4spl-deps.git \"${fw4spl__deps_repo_dir}\""
     
